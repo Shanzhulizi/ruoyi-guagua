@@ -136,15 +136,15 @@ public class UserController extends BaseController {
     /**
      * 导出用户列表
      */
-//    @PreAuthorize("@ss.hasPermi('user:user:export')")
-//    @Log(title = "用户", businessType = BusinessType.EXPORT)
-//    @PostMapping("/export")
-//    public void export(HttpServletResponse response, User user)
-//    {
-//        List<User> list = userService.selectUserList(user);
-//        ExcelUtil<User> util = new ExcelUtil<User>(User.class);
-//        util.exportExcel(response, list, "用户数据");
-//    }
+    @PreAuthorize("@ss.hasPermi('user:user:export')")
+    @Log(title = "用户", businessType = BusinessType.EXPORT)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, User user)
+    {
+        List<User> list = userService.selectUserList(user);
+        ExcelUtil<User> util = new ExcelUtil<User>(User.class);
+        util.exportExcel(response, list, "用户数据");
+    }
 
     /**
      * 获取用户详细信息

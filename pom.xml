@@ -229,6 +229,9 @@
         <module>ruoyi-generator</module>
         <module>ruoyi-common</module>
         <module>guagua-user</module>
+        <module>guagua-product</module>
+        <module>guagua-category</module>
+
 
     </modules>
     <packaging>pom</packaging>
