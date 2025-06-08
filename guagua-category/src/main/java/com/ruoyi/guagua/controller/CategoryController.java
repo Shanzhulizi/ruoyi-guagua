@@ -2,6 +2,8 @@ package com.ruoyi.guagua.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.guagua.vo.CategoryVO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +35,19 @@ public class CategoryController extends BaseController
 {
     @Autowired
     private ICategoryService categoryService;
+
+    @GetMapping("/getList")
+    public AjaxResult getList()
+    {
+        List<CategoryVO> list = categoryService.selectCategoryList();
+        return AjaxResult.success(list);
+    }
+
+
+    /**
+     * ************************************************************
+     * 若依自带
+     */
 
     /**
      * 查询商品种类列表

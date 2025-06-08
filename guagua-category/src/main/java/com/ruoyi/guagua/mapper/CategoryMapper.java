@@ -2,6 +2,8 @@ package com.ruoyi.guagua.mapper;
 
 import java.util.List;
 import com.ruoyi.guagua.domain.Category;
+import com.ruoyi.guagua.vo.CategoryVO;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 商品种类Mapper接口
@@ -9,6 +11,7 @@ import com.ruoyi.guagua.domain.Category;
  * @author lm
  * @date 2025-06-07
  */
+@Mapper
 public interface CategoryMapper 
 {
     /**
@@ -58,4 +61,7 @@ public interface CategoryMapper
      * @return 结果
      */
     public int deleteCategoryByIds(Long[] ids);
+
+
+    List<CategoryVO> selectCategories();
 }

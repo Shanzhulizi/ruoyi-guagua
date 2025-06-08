@@ -2,6 +2,8 @@ package com.ruoyi.guagua.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.guagua.vo.CategoryVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.guagua.mapper.CategoryMapper;
@@ -15,6 +17,7 @@ import com.ruoyi.guagua.service.ICategoryService;
  * @date 2025-06-07
  */
 @Service
+@Slf4j
 public class CategoryServiceImpl implements ICategoryService 
 {
     @Autowired
@@ -92,5 +95,14 @@ public class CategoryServiceImpl implements ICategoryService
     public int deleteCategoryById(Long id)
     {
         return categoryMapper.deleteCategoryById(id);
+    }
+
+    @Override
+    public List<CategoryVO> selectCategoryList() {
+        List<CategoryVO> list = categoryMapper.selectCategories();
+
+        log.info(list.toString());
+
+        return list;
     }
 }

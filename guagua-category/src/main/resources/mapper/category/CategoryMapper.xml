@@ -19,6 +19,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, name, parent_id, level, sort, status, create_time, update_time from category
     </sql>
 
+    <select id="selectCategories" resultType="com.ruoyi.guagua.vo.CategoryVO">
+        select id ,name,parent_id as parentId
+        from category
+        where status=1 and parent_id !=0
+    </select>
+
+    <!--    -->
     <select id="selectCategoryList" parameterType="Category" resultMap="CategoryResult">
         <include refid="selectCategoryVo"/>
         <where>  

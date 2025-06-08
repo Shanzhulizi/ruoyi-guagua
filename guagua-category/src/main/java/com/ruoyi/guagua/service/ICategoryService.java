@@ -2,6 +2,7 @@ package com.ruoyi.guagua.service;
 
 import java.util.List;
 import com.ruoyi.guagua.domain.Category;
+import com.ruoyi.guagua.vo.CategoryVO;
 
 /**
  * 商品种类Service接口
@@ -58,4 +59,6 @@ public interface ICategoryService
      * @return 结果
      */
     public int deleteCategoryById(Long id);
+
+    List<CategoryVO> selectCategoryList();
 }

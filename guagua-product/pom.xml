@@ -19,6 +19,14 @@
     </properties>
 
     <dependencies>
+        <!--        新建的-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.32</version> <!-- 推荐使用最新版 -->
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-framework</artifactId>
