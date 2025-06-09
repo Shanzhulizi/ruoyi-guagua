@@ -1,7 +1,13 @@
 package com.ruoyi.guagua.mapper;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.guagua.domain.Product;
+import com.ruoyi.guagua.vo.RecommendProductVO;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 商品Mapper接口
@@ -9,7 +15,8 @@ import com.ruoyi.guagua.domain.Product;
  * @author lm
  * @date 2025-06-07
  */
-public interface ProductMapper 
+@Mapper
+public interface ProductMapper
 {
     /**
      * 查询商品
@@ -58,4 +65,10 @@ public interface ProductMapper
      * @return 结果
      */
     public int deleteProductByIds(Long[] ids);
+
+    /**
+     * 获取推荐列表
+     * @return
+     */
+    List<Product> selectRecommendedProductList();
 }

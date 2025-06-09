@@ -55,6 +55,8 @@ public class UserController extends BaseController {
      */
     @PostMapping("/login")
     public AjaxResult login(@RequestBody LoginDTO loginDTO) {
+        System.out.println("dto?");
+        System.out.println(loginDTO);
         String username = loginDTO.getUsername();
         String password = loginDTO.getPassword();
 //        验证码判断逻辑
@@ -74,11 +76,13 @@ public class UserController extends BaseController {
             log.info("验证码错误");
             return AjaxResult.error("验证码错误");
         }
+
         // 调用登录服务
         User user;
         try {
             user = userService.Login(username, password);
         } catch (RuntimeException e) {
+            log.info("是这里吗");
             return AjaxResult.error(e.getMessage());
         }
 
@@ -101,6 +105,7 @@ public class UserController extends BaseController {
 
         // 返回 token
         AjaxResult ajax = AjaxResult.success();
+        System.out.println(token);
         ajax.put("token", token);
         return ajax;
     }

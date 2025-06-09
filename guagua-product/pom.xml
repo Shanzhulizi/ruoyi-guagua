@@ -26,6 +26,21 @@
             <version>1.18.32</version> <!-- 推荐使用最新版 -->
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-core</artifactId>
+            <version>3.5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-extension</artifactId>
+            <version>3.5.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.5</version>
+        </dependency>
 
         <dependency>
             <groupId>com.ruoyi</groupId>
@@ -37,5 +52,8 @@
             <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
+
+
+
     </dependencies>
 </project>

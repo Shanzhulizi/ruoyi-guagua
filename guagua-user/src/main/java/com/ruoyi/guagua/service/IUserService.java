@@ -66,4 +66,5 @@ public interface IUserService
      * @return
      */
     User Login(String username,String password);
+//    User Login(String username);
 }

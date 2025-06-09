@@ -1,7 +1,10 @@
 package com.ruoyi.guagua.service;
 
 import java.util.List;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ruoyi.guagua.domain.Product;
+import com.ruoyi.guagua.vo.RecommendProductVO;
 
 /**
  * 商品Service接口
@@ -58,4 +61,11 @@ public interface IProductService
      * @return 结果
      */
     public int deleteProductById(Long id);
+
+
+    /**
+     * 获取推荐列表
+     * @return
+     */
+    List<Product> recommendList();
 }

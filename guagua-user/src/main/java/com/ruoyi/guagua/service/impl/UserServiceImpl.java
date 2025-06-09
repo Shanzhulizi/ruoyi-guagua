@@ -116,7 +116,8 @@ public class UserServiceImpl implements IUserService
 
         //1、根据用户名查询数据库中的数据
         User user = userMapper.selectUserByUsername(username);
-        System.out.println(user);
+        System.out.println("password "+password);
+        System.out.println("userPassword "+user.getPassword());
 
 
         //2、处理各种异常情况（用户名不存在、密码不对、账号被锁定）
@@ -134,8 +135,11 @@ public class UserServiceImpl implements IUserService
         }
 
         //密码比对
-        //对前端传过来的明文密码进行md5加密处理
+//        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+//
+//        String encodedPassword = encoder.encode(password);
         boolean match = passwordEncoder.matches(password, user.getPassword());
+        System.out.println("match:"+match);
         if (!match) {
             //密码错误
             throw new RuntimeException("密码错误");
