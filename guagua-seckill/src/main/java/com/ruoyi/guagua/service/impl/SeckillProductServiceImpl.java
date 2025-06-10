@@ -93,4 +93,13 @@ public class SeckillProductServiceImpl implements ISeckillProductService
     {
         return seckillProductMapper.deleteSeckillProductById(id);
     }
+
+    /**
+     * 获取首页推荐秒杀商品
+     * @return
+     */
+    @Override
+    public List<SeckillProduct> getHotSeckillProducts() {
+        return seckillProductMapper.selectHotSeckillProducts();
+    }
 }

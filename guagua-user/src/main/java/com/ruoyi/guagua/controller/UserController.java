@@ -108,7 +108,9 @@ public class UserController extends BaseController {
         // 返回 token
         AjaxResult ajax = AjaxResult.success();
         ajax.put("token", token);
-
+        //加上这一句就会报错，好奇怪
+//        log.info("token  "+token);
+        System.out.println("token  "+token);
         // 👉 加上 user 简要信息，供前端缓存显示
         Map<String, Object> userInfo = new HashMap<>();
         userInfo.put("id", user.getId());

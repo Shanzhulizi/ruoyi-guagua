@@ -39,19 +39,19 @@ public class SeckillProduct extends BaseEntity
 
     /** 秒杀库存总量 */
     @Excel(name = "秒杀库存总量")
-    private String totalStock;
+    private Integer totalStock;
 
     /** 当前剩余库存（预减库存用） */
     @Excel(name = "当前剩余库存", readConverterExp = "预=减库存用")
-    private String availableStock;
+    private Integer availableStock;
 
     /** 已售数量（方便统计） */
     @Excel(name = "已售数量", readConverterExp = "方=便统计")
-    private String soldCount;
+    private Integer soldCount;
 
     /** 每个用户限购数量 */
     @Excel(name = "每个用户限购数量")
-    private String limitPerUser;
+    private Integer limitPerUser;
 
     /** 秒杀开始时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -125,42 +125,42 @@ public class SeckillProduct extends BaseEntity
         return seckillPrice;
     }
 
-    public void setTotalStock(String totalStock) 
+    public void setTotalStock(Integer totalStock) 
     {
         this.totalStock = totalStock;
     }
 
-    public String getTotalStock() 
+    public Integer getTotalStock() 
     {
         return totalStock;
     }
 
-    public void setAvailableStock(String availableStock) 
+    public void setAvailableStock(Integer availableStock) 
     {
         this.availableStock = availableStock;
     }
 
-    public String getAvailableStock() 
+    public Integer getAvailableStock() 
     {
         return availableStock;
     }
 
-    public void setSoldCount(String soldCount) 
+    public void setSoldCount(Integer soldCount) 
     {
         this.soldCount = soldCount;
     }
 
-    public String getSoldCount() 
+    public Integer getSoldCount() 
     {
         return soldCount;
     }
 
-    public void setLimitPerUser(String limitPerUser) 
+    public void setLimitPerUser(Integer limitPerUser) 
     {
         this.limitPerUser = limitPerUser;
     }
 
-    public String getLimitPerUser() 
+    public Integer getLimitPerUser() 
     {
         return limitPerUser;
     }

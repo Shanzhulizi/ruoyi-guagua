@@ -23,6 +23,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
+
+    <select id="selectHotSeckillProducts" resultType="com.ruoyi.guagua.vo.HotProductVO">
+        SELECT
+            sp.id,
+            sp.product_id as productId,
+            p.name,
+            sp.original_price as originalPrice,
+            sp.seckill_price as seckillPrice ,
+            sp.start_time as startTime
+        FROM seckill_product sp
+                 JOIN product p ON sp.product_id = p.id
+        WHERE sp.is_hot = 1 AND sp.status = 1 AND sp.is_deleted = 0
+        ORDER BY sp.start_time
+            LIMIT 3
+    </select>
+
     <sql id="selectSeckillProductVo">
         select id, activity_id, product_id, original_price, seckill_price, total_stock, available_stock, sold_count, limit_per_user, start_time, end_time, is_hot, status, is_deleted, create_time, update_time from seckill_product
     </sql>
@@ -34,10 +50,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="productId != null "> and product_id = #{productId}</if>
             <if test="originalPrice != null "> and original_price = #{originalPrice}</if>
             <if test="seckillPrice != null "> and seckill_price = #{seckillPrice}</if>
-            <if test="totalStock != null  and totalStock != ''"> and total_stock = #{totalStock}</if>
-            <if test="availableStock != null  and availableStock != ''"> and available_stock = #{availableStock}</if>
-            <if test="soldCount != null  and soldCount != ''"> and sold_count = #{soldCount}</if>
-            <if test="limitPerUser != null  and limitPerUser != ''"> and limit_per_user = #{limitPerUser}</if>
+            <if test="totalStock != null "> and total_stock = #{totalStock}</if>
+            <if test="availableStock != null "> and available_stock = #{availableStock}</if>
+            <if test="soldCount != null "> and sold_count = #{soldCount}</if>
+            <if test="limitPerUser != null "> and limit_per_user = #{limitPerUser}</if>
             <if test="startTime != null "> and start_time = #{startTime}</if>
             <if test="endTime != null "> and end_time = #{endTime}</if>
             <if test="isHot != null "> and is_hot = #{isHot}</if>
@@ -58,10 +74,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="productId != null">product_id,</if>
             <if test="originalPrice != null">original_price,</if>
             <if test="seckillPrice != null">seckill_price,</if>
-            <if test="totalStock != null and totalStock != ''">total_stock,</if>
-            <if test="availableStock != null and availableStock != ''">available_stock,</if>
+            <if test="totalStock != null">total_stock,</if>
+            <if test="availableStock != null">available_stock,</if>
             <if test="soldCount != null">sold_count,</if>
-            <if test="limitPerUser != null and limitPerUser != ''">limit_per_user,</if>
+            <if test="limitPerUser != null">limit_per_user,</if>
             <if test="startTime != null">start_time,</if>
             <if test="endTime != null">end_time,</if>
             <if test="isHot != null">is_hot,</if>
@@ -75,10 +91,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="productId != null">#{productId},</if>
             <if test="originalPrice != null">#{originalPrice},</if>
             <if test="seckillPrice != null">#{seckillPrice},</if>
-            <if test="totalStock != null and totalStock != ''">#{totalStock},</if>
-            <if test="availableStock != null and availableStock != ''">#{availableStock},</if>
+            <if test="totalStock != null">#{totalStock},</if>
+            <if test="availableStock != null">#{availableStock},</if>
             <if test="soldCount != null">#{soldCount},</if>
-            <if test="limitPerUser != null and limitPerUser != ''">#{limitPerUser},</if>
+            <if test="limitPerUser != null">#{limitPerUser},</if>
             <if test="startTime != null">#{startTime},</if>
             <if test="endTime != null">#{endTime},</if>
             <if test="isHot != null">#{isHot},</if>
@@ -96,10 +112,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="productId != null">product_id = #{productId},</if>
             <if test="originalPrice != null">original_price = #{originalPrice},</if>
             <if test="seckillPrice != null">seckill_price = #{seckillPrice},</if>
-            <if test="totalStock != null and totalStock != ''">total_stock = #{totalStock},</if>
-            <if test="availableStock != null and availableStock != ''">available_stock = #{availableStock},</if>
+            <if test="totalStock != null">total_stock = #{totalStock},</if>
+            <if test="availableStock != null">available_stock = #{availableStock},</if>
             <if test="soldCount != null">sold_count = #{soldCount},</if>
-            <if test="limitPerUser != null and limitPerUser != ''">limit_per_user = #{limitPerUser},</if>
+            <if test="limitPerUser != null">limit_per_user = #{limitPerUser},</if>
             <if test="startTime != null">start_time = #{startTime},</if>
             <if test="endTime != null">end_time = #{endTime},</if>
             <if test="isHot != null">is_hot = #{isHot},</if>

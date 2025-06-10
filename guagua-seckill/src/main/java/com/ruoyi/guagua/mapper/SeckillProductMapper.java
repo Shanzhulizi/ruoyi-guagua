@@ -58,4 +58,10 @@ public interface SeckillProductMapper
      * @return 结果
      */
     public int deleteSeckillProductByIds(Long[] ids);
+
+    /**
+     * 获取首页推荐秒杀商品
+     *
+     */
+    List<SeckillProduct> selectHotSeckillProducts();
 }

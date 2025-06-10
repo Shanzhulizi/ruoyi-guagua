@@ -35,7 +35,16 @@ public class SeckillProductController extends BaseController
     private ISeckillProductService seckillProductService;
 
 
+    @GetMapping("/hot")
+    public List<SeckillProduct> getHotSeckillProducts(){
+        return seckillProductService.getHotSeckillProducts();
+    }
 
+
+    /**
+     * *******************************************
+     * 以下为若依自带
+     */
 
 
 

@@ -58,4 +58,10 @@ public interface ISeckillProductService
      * @return 结果
      */
     public int deleteSeckillProductById(Long id);
+
+    /**
+     * 获取首页推荐秒杀商品
+     * @return
+     */
+    List<SeckillProduct> getHotSeckillProducts();
 }
