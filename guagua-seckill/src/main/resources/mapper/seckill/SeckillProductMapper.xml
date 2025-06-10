@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.guagua.mapper.SeckillProductMapper">
+    
+    <resultMap type="SeckillProduct" id="SeckillProductResult">
+        <result property="id"    column="id"    />
+        <result property="activityId"    column="activity_id"    />
+        <result property="productId"    column="product_id"    />
+        <result property="originalPrice"    column="original_price"    />
+        <result property="seckillPrice"    column="seckill_price"    />
+        <result property="totalStock"    column="total_stock"    />
+        <result property="availableStock"    column="available_stock"    />
+        <result property="soldCount"    column="sold_count"    />
+        <result property="limitPerUser"    column="limit_per_user"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="isHot"    column="is_hot"    />
+        <result property="status"    column="status"    />
+        <result property="isDeleted"    column="is_deleted"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSeckillProductVo">
+        select id, activity_id, product_id, original_price, seckill_price, total_stock, available_stock, sold_count, limit_per_user, start_time, end_time, is_hot, status, is_deleted, create_time, update_time from seckill_product
+    </sql>
+
+    <select id="selectSeckillProductList" parameterType="SeckillProduct" resultMap="SeckillProductResult">
+        <include refid="selectSeckillProductVo"/>
+        <where>  
+            <if test="activityId != null "> and activity_id = #{activityId}</if>
+            <if test="productId != null "> and product_id = #{productId}</if>
+            <if test="originalPrice != null "> and original_price = #{originalPrice}</if>
+            <if test="seckillPrice != null "> and seckill_price = #{seckillPrice}</if>
+            <if test="totalStock != null  and totalStock != ''"> and total_stock = #{totalStock}</if>
+            <if test="availableStock != null  and availableStock != ''"> and available_stock = #{availableStock}</if>
+            <if test="soldCount != null  and soldCount != ''"> and sold_count = #{soldCount}</if>
+            <if test="limitPerUser != null  and limitPerUser != ''"> and limit_per_user = #{limitPerUser}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="isHot != null "> and is_hot = #{isHot}</if>
+            <if test="status != null "> and status = #{status}</if>
+            <if test="isDeleted != null "> and is_deleted = #{isDeleted}</if>
+        </where>
+    </select>
+    
+    <select id="selectSeckillProductById" parameterType="Long" resultMap="SeckillProductResult">
+        <include refid="selectSeckillProductVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSeckillProduct" parameterType="SeckillProduct" useGeneratedKeys="true" keyProperty="id">
+        insert into seckill_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="activityId != null">activity_id,</if>
+            <if test="productId != null">product_id,</if>
+            <if test="originalPrice != null">original_price,</if>
+            <if test="seckillPrice != null">seckill_price,</if>
+            <if test="totalStock != null and totalStock != ''">total_stock,</if>
+            <if test="availableStock != null and availableStock != ''">available_stock,</if>
+            <if test="soldCount != null">sold_count,</if>
+            <if test="limitPerUser != null and limitPerUser != ''">limit_per_user,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="isHot != null">is_hot,</if>
+            <if test="status != null">status,</if>
+            <if test="isDeleted != null">is_deleted,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="activityId != null">#{activityId},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="originalPrice != null">#{originalPrice},</if>
+            <if test="seckillPrice != null">#{seckillPrice},</if>
+            <if test="totalStock != null and totalStock != ''">#{totalStock},</if>
+            <if test="availableStock != null and availableStock != ''">#{availableStock},</if>
+            <if test="soldCount != null">#{soldCount},</if>
+            <if test="limitPerUser != null and limitPerUser != ''">#{limitPerUser},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="isHot != null">#{isHot},</if>
+            <if test="status != null">#{status},</if>
+            <if test="isDeleted != null">#{isDeleted},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSeckillProduct" parameterType="SeckillProduct">
+        update seckill_product
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="activityId != null">activity_id = #{activityId},</if>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="originalPrice != null">original_price = #{originalPrice},</if>
+            <if test="seckillPrice != null">seckill_price = #{seckillPrice},</if>
+            <if test="totalStock != null and totalStock != ''">total_stock = #{totalStock},</if>
+            <if test="availableStock != null and availableStock != ''">available_stock = #{availableStock},</if>
+            <if test="soldCount != null">sold_count = #{soldCount},</if>
+            <if test="limitPerUser != null and limitPerUser != ''">limit_per_user = #{limitPerUser},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="isHot != null">is_hot = #{isHot},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSeckillProductById" parameterType="Long">
+        delete from seckill_product where id = #{id}
+    </delete>
+
+    <delete id="deleteSeckillProductByIds" parameterType="String">
+        delete from seckill_product where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

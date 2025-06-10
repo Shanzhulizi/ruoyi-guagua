@@ -89,6 +89,11 @@
             <artifactId>guagua-category</artifactId>
             <version>3.9.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.lm</groupId>
+            <artifactId>guagua-seckill</artifactId>
+            <version>3.9.0</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,6 +1,8 @@
 package com.ruoyi.guagua.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.constant.CacheConstants;
@@ -105,8 +107,17 @@ public class UserController extends BaseController {
 
         // 返回 token
         AjaxResult ajax = AjaxResult.success();
-        System.out.println(token);
         ajax.put("token", token);
+
+        // 👉 加上 user 简要信息，供前端缓存显示
+        Map<String, Object> userInfo = new HashMap<>();
+        userInfo.put("id", user.getId());
+        userInfo.put("username", user.getUsername());
+        userInfo.put("nickname", user.getNickname()); // 如果你有昵称字段
+        userInfo.put("avatar", user.getAvatar());     // 如果你有头像字段
+        ajax.put("user", userInfo);
+
+
         return ajax;
     }
 
