@@ -39,6 +39,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             LIMIT 3
     </select>
 
+    <select id="selectAllSeckillProductList" resultType="com.ruoyi.guagua.vo.SeckillProductDisplayVO">
+        SELECT
+            sp.id,
+            p.name,
+            p.image,
+            sp.original_price as originalPrice,
+            sp.seckill_price as seckillPrice
+        FROM seckill_product sp
+                 JOIN product p ON sp.product_id = p.id
+        WHERE  sp.status = 1 AND sp.is_deleted = 0
+        ORDER BY sp.start_time
+    </select>
+
+
+    <select id="selectSeckillProductDetailById" resultType="com.ruoyi.guagua.vo.SeckillProductVO">
+        SELECT sp.id,
+               sp.product_id      as productId,
+               sp.activity_id     as activityId,
+               p.name,
+               p.image,
+               sp.original_price  as originalPrice,
+               sp.seckill_price   as seckillPrice,
+               sp.total_stock     as totalStock,
+               sp.available_stock as availableStock,
+               sp.limit_per_user  as limitPerUser,
+               sp.start_time      as startTime,
+               sp.end_time        as endTime
+
+        FROM seckill_product sp
+                 JOIN product p ON sp.product_id = p.id
+        WHERE sp.id = #{id}
+          AND sp.status = 1
+          AND sp.is_deleted = 0
+        ORDER BY sp.start_time
+    </select>
+
     <sql id="selectSeckillProductVo">
         select id, activity_id, product_id, original_price, seckill_price, total_stock, available_stock, sold_count, limit_per_user, start_time, end_time, is_hot, status, is_deleted, create_time, update_time from seckill_product
     </sql>

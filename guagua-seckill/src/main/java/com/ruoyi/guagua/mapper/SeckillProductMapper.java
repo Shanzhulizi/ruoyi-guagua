@@ -2,6 +2,8 @@ package com.ruoyi.guagua.mapper;
 
 import java.util.List;
 import com.ruoyi.guagua.domain.SeckillProduct;
+import com.ruoyi.guagua.vo.SeckillProductDisplayVO;
+import com.ruoyi.guagua.vo.SeckillProductVO;
 
 /**
  * 秒杀商品（独立库存、独立活动）Mapper接口
@@ -64,4 +66,17 @@ public interface SeckillProductMapper
      *
      */
     List<SeckillProduct> selectHotSeckillProducts();
+
+    /**
+     * 获取所有秒杀商品
+     * @return
+     */
+    List<SeckillProductDisplayVO> selectAllSeckillProductList();
+
+    /**
+     * 获取某个秒杀商品详细信息
+     * @param id
+     * @return
+     */
+    SeckillProductVO selectSeckillProductDetailById(Long id);
 }

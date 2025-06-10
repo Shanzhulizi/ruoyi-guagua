@@ -2,6 +2,8 @@ package com.ruoyi.guagua.service;
 
 import java.util.List;
 import com.ruoyi.guagua.domain.SeckillProduct;
+import com.ruoyi.guagua.vo.SeckillProductDisplayVO;
+import com.ruoyi.guagua.vo.SeckillProductVO;
 
 /**
  * 秒杀商品（独立库存、独立活动）Service接口
@@ -64,4 +66,16 @@ public interface ISeckillProductService
      * @return
      */
     List<SeckillProduct> getHotSeckillProducts();
+
+
+    /**
+     * 获取所有秒杀商品
+     * @return
+     */
+//    List<SeckillProductVO> selectAllSeckillProductList();
+    List<SeckillProductDisplayVO> selectAllSeckillProductList();
+
+
+    SeckillProductVO getDetailById(Long id);
+
 }

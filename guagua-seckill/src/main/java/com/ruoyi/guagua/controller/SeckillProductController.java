@@ -2,6 +2,9 @@ package com.ruoyi.guagua.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.guagua.vo.SeckillProductDisplayVO;
+import com.ruoyi.guagua.vo.SeckillProductVO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +43,25 @@ public class SeckillProductController extends BaseController
         return seckillProductService.getHotSeckillProducts();
     }
 
+    @GetMapping("/listAll")
+    public AjaxResult listAll()
+    {
+//        startPage();
+        List<SeckillProductDisplayVO> list = seckillProductService.selectAllSeckillProductList();
+        System.out.println("秒杀商品数量 ：" + list.size());
+        return AjaxResult.success(list);
+    }
+
+
+    @GetMapping("/detail/{id}")
+    public AjaxResult getDetail(@PathVariable("id") Long id) {
+        SeckillProductVO vo = seckillProductService.getDetailById(id);
+        if (vo != null) {
+            return AjaxResult.success(vo);
+        } else {
+            return AjaxResult.error("商品不存在");
+        }
+    }
 
     /**
      * *******************************************
@@ -56,7 +78,7 @@ public class SeckillProductController extends BaseController
     public TableDataInfo list(SeckillProduct seckillProduct)
     {
         startPage();
-        List<SeckillProduct> list = seckillProductService.selectSeckillProductList(seckillProduct);
+        List<SeckillProductDisplayVO> list = seckillProductService.selectAllSeckillProductList();
         return getDataTable(list);
     }
 

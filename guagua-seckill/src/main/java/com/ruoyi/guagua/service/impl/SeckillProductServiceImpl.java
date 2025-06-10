@@ -2,6 +2,8 @@ package com.ruoyi.guagua.service.impl;
 
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.guagua.vo.SeckillProductDisplayVO;
+import com.ruoyi.guagua.vo.SeckillProductVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.guagua.mapper.SeckillProductMapper;
@@ -101,5 +103,29 @@ public class SeckillProductServiceImpl implements ISeckillProductService
     @Override
     public List<SeckillProduct> getHotSeckillProducts() {
         return seckillProductMapper.selectHotSeckillProducts();
+    }
+
+
+
+
+    /**
+     * 获取所有秒杀商品
+     * @return
+     */
+    @Override
+    public List<SeckillProductDisplayVO> selectAllSeckillProductList() {
+        return seckillProductMapper.selectAllSeckillProductList();
+
+    }
+
+
+//    @Override
+//    public List<SeckillProductVO> selectAllSeckillProductList() {
+//        return seckillProductMapper.selectAllSeckillProductList();
+//    }
+
+    @Override
+    public SeckillProductVO getDetailById(Long id) {
+        return seckillProductMapper.selectSeckillProductDetailById(id);
     }
 }
