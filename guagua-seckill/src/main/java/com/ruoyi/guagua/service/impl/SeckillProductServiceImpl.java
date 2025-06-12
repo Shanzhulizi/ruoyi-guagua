@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.guagua.mapper.SeckillProductMapper;
 import com.ruoyi.guagua.domain.SeckillProduct;
 import com.ruoyi.guagua.service.ISeckillProductService;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.ruoyi.guagua.utils.DateUtil.convertDateToLocalDateTime;
 

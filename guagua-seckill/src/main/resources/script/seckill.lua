@@ -2,8 +2,12 @@
 -- KEYS[2]: 用户已购key
 -- ARGV[1]: 用户ID
 
-local stock = tonumber(redis.call("get", KEYS[1]))
-if not stock or stock <= 0 then
+local stock = redis.call("get", KEYS[1])
+if not stock then
+    return 0
+end
+stock = tonumber(stock)
+if stock <= 0 then
     return 0
 end
 
