@@ -36,13 +36,6 @@ public class RedisSeckillService {
         String stockKey = "seckill:stock:" + productId;
         String userKey = "seckill:user:" + productId;
 
-//        return redisTemplate.execute(
-//                seckillScript,
-//                // KEYS
-//                List.of(stockKey, userKey),
-//                // ARGV
-//                userId.toString()
-//        );
         return redisTemplate.execute(
                 seckillScript,
                 // KEYS

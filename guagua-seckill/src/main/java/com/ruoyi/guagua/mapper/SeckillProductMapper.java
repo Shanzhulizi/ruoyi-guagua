@@ -1,5 +1,6 @@
 package com.ruoyi.guagua.mapper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import com.ruoyi.guagua.domain.SeckillProduct;
 import com.ruoyi.guagua.vo.SeckillProductDisplayVO;
@@ -91,4 +92,17 @@ public interface SeckillProductMapper
      */
     @Update("UPDATE seckill_product SET available_stock = available_stock - 1 WHERE id = #{id} AND available_stock > 0")
     int reduceStock(Long id);
+
+
+    /**
+     * 下面三个方法均与库存到Redis有关
+     * ************************************************************
+     * @param id
+     * @return
+     */
+//    Integer selectStockById(Long id);
+//
+//    int updateStockById(Long productId, Integer stock);
+//
+//    List<SeckillProduct> selectProductsByTimeRange(LocalDateTime now, LocalDateTime endTime);
 }

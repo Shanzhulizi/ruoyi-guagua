@@ -105,46 +105,38 @@ public class SeckillProductController extends BaseController
      * @param userId
      * @return
      */
-    @PostMapping("/purchase/{id}")
-    public AjaxResult purchase(@PathVariable Long id , @RequestParam Long userId) {
-        // 构造秒杀消息
-        SeckillMessage message = SeckillMessage.builder()
-                .userId(userId)
-                .productId(id)
-                .build();
-
-        // 发消息到 MQ
-        seckillProducer.sendSeckillMessage(message);
-
-        return AjaxResult.success("请求已排队，请稍候查看订单状态");
-    }
+//    @PostMapping("/purchase/{id}")
+//    public AjaxResult purchase(@PathVariable Long id , @RequestParam Long userId) {
+//        // 构造秒杀消息
+//        SeckillMessage message = SeckillMessage.builder()
+//                .userId(userId)
+//                .productId(id)
+//                .build();
+//
+//        // 发消息到 MQ
+//        seckillProducer.sendSeckillMessage(message);
+//
+//        return AjaxResult.success("请求已排队，请稍候查看订单状态");
+//    }
 
     /**
-     * 这是为了让jmeter方便测试的改造版，添加了异步mq功能
      * 在mq的基础上，添加Redis
-     * @param id
+     * @param productId
      * @param userId
      * @return
      */
-//    @PostMapping("/purchase/{id}")
-//    public AjaxResult purchase(@PathVariable Long id , @RequestParam Long userId) {
-//
-//
-//        long result = redisSeckillService.executeSeckill(id, userId);
-//        if (result == 0) {
-//            return AjaxResult.error("库存不足");
-//        } else if (result == 2) {
-//            return AjaxResult.error("你已抢购过该商品");
-//        }
-//
-//        // 成功后记录日志（不要立即下单）
-//        seckillSuccessLogMapper.insertLog(new SeckillSuccessLog(userId, id));
-//        return AjaxResult.success("秒杀成功，正在处理订单");
-//    }
+    @PostMapping("/purchase/{productId}")
+    public AjaxResult purchase(@PathVariable Long productId, @RequestParam Long userId) {
+        long result = redisSeckillService.executeSeckill(productId, userId);
+        if (result == 0) return AjaxResult.error("库存不足");
+        if (result == 2) return AjaxResult.error("请勿重复抢购");
 
+        SeckillMessage message = SeckillMessage.builder()
+                .userId(userId).productId(productId).build();
+        seckillProducer.sendSeckillMessage(message);
 
-
-
+        return AjaxResult.success("抢购成功，正在为您创建订单");
+    }
 
 
     /**
