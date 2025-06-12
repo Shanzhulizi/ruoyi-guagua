@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.guagua.mapper.SeckillOrderMapper">
+    <insert id="insertOrder" parameterType="SeckillOrder">
+        INSERT INTO seckill_order (user_id, product_id, seckill_price, create_time, status)
+        VALUES (#{userId}, #{productId}, #{seckillPrice}, NOW(), 0)
+    </insert>
+
+</mapper>

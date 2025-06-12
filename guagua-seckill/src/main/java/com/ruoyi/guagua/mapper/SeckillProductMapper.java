@@ -4,6 +4,8 @@ import java.util.List;
 import com.ruoyi.guagua.domain.SeckillProduct;
 import com.ruoyi.guagua.vo.SeckillProductDisplayVO;
 import com.ruoyi.guagua.vo.SeckillProductVO;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * 秒杀商品（独立库存、独立活动）Mapper接口
@@ -11,6 +13,7 @@ import com.ruoyi.guagua.vo.SeckillProductVO;
  * @author lm
  * @date 2025-06-10
  */
+@Mapper
 public interface SeckillProductMapper 
 {
     /**
@@ -79,4 +82,13 @@ public interface SeckillProductMapper
      * @return
      */
     SeckillProductVO selectSeckillProductDetailById(Long id);
+
+
+    /**
+     * 减库存逻辑
+     * @param id
+     * @return
+     */
+    @Update("UPDATE seckill_product SET available_stock = available_stock - 1 WHERE id = #{id} AND available_stock > 0")
+    int reduceStock(Long id);
 }

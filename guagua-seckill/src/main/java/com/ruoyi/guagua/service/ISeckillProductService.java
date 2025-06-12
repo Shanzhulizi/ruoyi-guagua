@@ -76,6 +76,15 @@ public interface ISeckillProductService
     List<SeckillProductDisplayVO> selectAllSeckillProductList();
 
 
+    /**
+     * 获取秒杀商品详情
+     * @param id
+     * @return
+     */
     SeckillProductVO getDetailById(Long id);
+
+//    boolean purchaseSeckillProduct(Long id);
+
+    boolean purchaseSeckillProduct(Long id,Long userId);
 
 }

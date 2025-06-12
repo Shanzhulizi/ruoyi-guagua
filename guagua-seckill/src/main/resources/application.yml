@@ -1,0 +1,42 @@
+
+# Spring配置
+spring:
+  # redis 配置
+  redis:
+    # 地址
+    host: localhost
+    # 端口，默认为6379
+    port: 6379
+    # 数据库索引
+    database: 0
+    # 密码
+    password:
+    # 连接超时时间
+    timeout: 10s
+    lettuce:
+      pool:
+        # 连接池中的最小空闲连接
+        min-idle: 0
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池的最大数据库连接数
+        max-active: 8
+        # #连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1ms
+
+
+
+  rabbitmq:
+    host: localhost   # RabbitMQ 服务地址，若部署在其他服务器，请改为实际地址
+    port: 5672        # 默认端口
+    username: guest   # 用户名，生产环境中请改为自己的账号
+    password: guest   # 密码，同上
+    virtual-host: /   # 默认虚拟主机
+
+    listener:
+      simple:
+        acknowledge-mode: auto  # 自动确认，可选 manual（手动确认）
+        prefetch: 1              # 每次处理一条消息（根据业务压力可以调高）
+
+    template:
+      mandatory: true

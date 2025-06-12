@@ -3,18 +3,15 @@ package com.ruoyi.guagua.controller;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.guagua.domain.SeckillMessage;
+import com.ruoyi.guagua.mq.SeckillProducer;
+import com.ruoyi.guagua.redis.RedisSeckillService;
+import com.ruoyi.guagua.service.SeckillOrderService;
 import com.ruoyi.guagua.vo.SeckillProductDisplayVO;
 import com.ruoyi.guagua.vo.SeckillProductVO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -37,7 +34,11 @@ public class SeckillProductController extends BaseController
     @Autowired
     private ISeckillProductService seckillProductService;
 
+    @Autowired
+    private SeckillProducer seckillProducer;
 
+    @Autowired
+    RedisSeckillService redisSeckillService;
     @GetMapping("/hot")
     public List<SeckillProduct> getHotSeckillProducts(){
         return seckillProductService.getHotSeckillProducts();
@@ -62,6 +63,89 @@ public class SeckillProductController extends BaseController
             return AjaxResult.error("商品不存在");
         }
     }
+
+
+    /**
+     * 这是最初的逻辑
+     * @param id
+     * @param userId
+     * @return
+     */
+//    @PostMapping("/purchase/{id}")
+//    public AjaxResult purchase(@PathVariable Long id) {
+//        boolean success = seckillProductService.purchaseSeckillProduct(id);
+//        if (success) {
+//            return AjaxResult.success("购买成功！");
+//        } else {
+//            return AjaxResult.error("库存不足或活动未开始");
+//        }
+//    }
+
+
+    /**
+     * 这是为了让jmeter方便测试的改造版，最终还是要改回去的
+     * @param id
+     * @param userId
+     * @return
+     */
+//    @PostMapping("/purchase/{id}")
+//    public AjaxResult purchase(@PathVariable Long id , @RequestParam Long userId) {
+//        boolean success = seckillProductService.purchaseSeckillProduct(id, userId);
+//        if (success) {
+//            return AjaxResult.success("购买成功！");
+//        } else {
+//            return AjaxResult.error("库存不足或活动未开始");
+//        }
+//    }
+
+
+    /**
+     * 这是为了让jmeter方便测试的改造版，添加了异步mq功能
+     * @param id
+     * @param userId
+     * @return
+     */
+    @PostMapping("/purchase/{id}")
+    public AjaxResult purchase(@PathVariable Long id , @RequestParam Long userId) {
+        // 构造秒杀消息
+        SeckillMessage message = SeckillMessage.builder()
+                .userId(userId)
+                .productId(id)
+                .build();
+
+        // 发消息到 MQ
+        seckillProducer.sendSeckillMessage(message);
+
+        return AjaxResult.success("请求已排队，请稍候查看订单状态");
+    }
+
+    /**
+     * 这是为了让jmeter方便测试的改造版，添加了异步mq功能
+     * 在mq的基础上，添加Redis
+     * @param id
+     * @param userId
+     * @return
+     */
+//    @PostMapping("/purchase/{id}")
+//    public AjaxResult purchase(@PathVariable Long id , @RequestParam Long userId) {
+//
+//
+//        long result = redisSeckillService.executeSeckill(id, userId);
+//        if (result == 0) {
+//            return AjaxResult.error("库存不足");
+//        } else if (result == 2) {
+//            return AjaxResult.error("你已抢购过该商品");
+//        }
+//
+//        // 成功后记录日志（不要立即下单）
+//        seckillSuccessLogMapper.insertLog(new SeckillSuccessLog(userId, id));
+//        return AjaxResult.success("秒杀成功，正在处理订单");
+//    }
+
+
+
+
+
 
     /**
      * *******************************************

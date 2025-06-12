@@ -110,6 +110,9 @@ public class SecurityConfig
             // 注解标记允许匿名访问的url
             .authorizeHttpRequests((requests) -> {
                 permitAllUrl.getUrls().forEach(url -> requests.antMatchers(url).permitAll());
+                // 这里的放行用来测试秒杀
+                requests.antMatchers("/seckill/seckill/purchase/1").permitAll();
+
 //                我定义的放行
                 requests.antMatchers("/user/user/login", "/user/user/register").permitAll();
                 // 对于登录login 注册register 验证码captchaImage 允许匿名访问

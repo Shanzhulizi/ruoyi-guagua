@@ -1,7 +1,14 @@
 package com.ruoyi.guagua.service.impl;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
+
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.guagua.domain.SeckillOrder;
+import com.ruoyi.guagua.mapper.SeckillOrderMapper;
 import com.ruoyi.guagua.vo.SeckillProductDisplayVO;
 import com.ruoyi.guagua.vo.SeckillProductVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +16,9 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.guagua.mapper.SeckillProductMapper;
 import com.ruoyi.guagua.domain.SeckillProduct;
 import com.ruoyi.guagua.service.ISeckillProductService;
+import org.springframework.transaction.annotation.Transactional;
+
+import static com.ruoyi.guagua.utils.DateUtil.convertDateToLocalDateTime;
 
 /**
  * 秒杀商品（独立库存、独立活动）Service业务层处理
@@ -22,6 +32,8 @@ public class SeckillProductServiceImpl implements ISeckillProductService
     @Autowired
     private SeckillProductMapper seckillProductMapper;
 
+    @Autowired
+    private SeckillOrderMapper seckillOrderMapper;
     /**
      * 查询秒杀商品（独立库存、独立活动）
      * 
@@ -119,13 +131,108 @@ public class SeckillProductServiceImpl implements ISeckillProductService
     }
 
 
-//    @Override
-//    public List<SeckillProductVO> selectAllSeckillProductList() {
-//        return seckillProductMapper.selectAllSeckillProductList();
-//    }
-
     @Override
     public SeckillProductVO getDetailById(Long id) {
         return seckillProductMapper.selectSeckillProductDetailById(id);
+    }
+
+
+    /**
+     * 获取当前用户id
+     * @return
+     */
+    private Long getCurrentUserId() {
+        return SecurityUtils.getUserId(); // 若依框架获取当前登录用户ID的方法
+    }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+//    @Override
+//    public boolean purchaseSeckillProduct(Long id) {
+//        SeckillProduct product = seckillProductMapper.selectSeckillProductById(id);
+//        if (product == null) return false;
+//
+//        // 时间判断
+//        LocalDateTime now = LocalDateTime.now();
+//        LocalDateTime startTime = convertDateToLocalDateTime(product.getStartTime());
+//        LocalDateTime endTime = convertDateToLocalDateTime(product.getEndTime());
+//
+//        if (now.isBefore(startTime) || now.isAfter(endTime)) {
+//            return false;
+//        }
+//
+//        // 库存判断
+//        if (product.getAvailableStock() <= 0) {
+//            return false;
+//        }
+//
+//        // 并发减库存
+//        int result = seckillProductMapper.reduceStock(id);
+//        if (result <= 0) {
+//            return false;
+//        }
+//
+//        // 添加订单（此处用假用户ID模拟）
+//        Long userId = getCurrentUserId(); // TODO: 从登录上下文获取用户ID
+//
+//        SeckillOrder order = new SeckillOrder();
+//        order.setUserId(userId);
+//        order.setProductId(id);
+//        order.setSeckillPrice(product.getSeckillPrice());
+//        order.setCreateTime(new Date());
+//        order.setStatus(0);
+//
+//        System.out.println(order);
+//
+//        seckillOrderMapper.insertOrder(order);
+//        return true;
+//    }
+
+
+
+
+//    @Transactional
+    @Override
+    public boolean purchaseSeckillProduct(Long id,Long userId) {
+        SeckillProduct product = seckillProductMapper.selectSeckillProductById(id);
+        if (product == null) return false;
+
+        // 时间判断
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startTime = convertDateToLocalDateTime(product.getStartTime());
+        LocalDateTime endTime = convertDateToLocalDateTime(product.getEndTime());
+
+        if (now.isBefore(startTime) || now.isAfter(endTime)) {
+            return false;
+        }
+
+        // 库存判断
+        if (product.getAvailableStock() <= 0) {
+            return false;
+        }
+
+        // 并发减库存
+        int result = seckillProductMapper.reduceStock(id);
+        if (result <= 0) {
+            return false;
+        }
+
+        // 添加订单（此处用假用户ID模拟）
+//        Long userId = getCurrentUserId(); // TODO: 从登录上下文获取用户ID
+
+        SeckillOrder order = new SeckillOrder();
+        order.setUserId(userId);
+        order.setProductId(id);
+        order.setSeckillPrice(product.getSeckillPrice());
+        order.setCreateTime(new Date());
+        order.setStatus(0);
+
+        System.out.println(order);
+
+        seckillOrderMapper.insertOrder(order);
+        return true;
     }
 }
