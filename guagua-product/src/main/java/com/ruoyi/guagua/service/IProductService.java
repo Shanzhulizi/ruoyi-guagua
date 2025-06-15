@@ -2,9 +2,8 @@ package com.ruoyi.guagua.service;
 
 import java.util.List;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ruoyi.guagua.domain.Product;
-import com.ruoyi.guagua.vo.RecommendProductVO;
+import com.ruoyi.guagua.vo.CategoryProductVO;
 
 /**
  * 商品Service接口
@@ -68,4 +67,12 @@ public interface IProductService
      * @return
      */
     List<Product> recommendList();
+
+    /**
+     * 根据分类id获取商品列表
+     *
+     * @param categoryId
+     * @return
+     */
+    List<CategoryProductVO> getByCategoryId(Long categoryId);
 }

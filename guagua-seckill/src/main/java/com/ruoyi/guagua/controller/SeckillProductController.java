@@ -3,6 +3,8 @@ package com.ruoyi.guagua.controller;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.guagua.domain.SeckillMessage;
 import com.ruoyi.guagua.mq.SeckillProducer;
 import com.ruoyi.guagua.redis.RedisSeckillService;
@@ -121,12 +123,34 @@ public class SeckillProductController extends BaseController
 
     /**
      * 在mq的基础上，添加Redis
+     * 这个仅为压测使用，现在没用了
      * @param productId
      * @param userId
      * @return
      */
+//    @PostMapping("/purchase/{productId}")
+//    public AjaxResult purchase(@PathVariable Long productId, @RequestParam Long userId) {
+//        long result = redisSeckillService.executeSeckill(productId, userId);
+//        if (result == 0) return AjaxResult.error("库存不足");
+//        if (result == 2) return AjaxResult.error("请勿重复抢购");
+//
+//        SeckillMessage message = SeckillMessage.builder()
+//                .userId(userId).productId(productId).build();
+//        seckillProducer.sendSeckillMessage(message);
+//
+//        return AjaxResult.success("抢购成功，正在为您创建订单");
+//    }
+
+
+    /**
+     * 那接下来就回到原本的
+     * @param productId
+     * @return
+     */
     @PostMapping("/purchase/{productId}")
-    public AjaxResult purchase(@PathVariable Long productId, @RequestParam Long userId) {
+    public AjaxResult purchase(@PathVariable Long productId) {
+        LoginUser loginUser = SecurityUtils.getLoginUser(); // 若依默认就是这样
+        Long userId= loginUser.getUserId();
         long result = redisSeckillService.executeSeckill(productId, userId);
         if (result == 0) return AjaxResult.error("库存不足");
         if (result == 2) return AjaxResult.error("请勿重复抢购");

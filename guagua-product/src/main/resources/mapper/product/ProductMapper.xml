@@ -35,6 +35,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     </select>
 
+    <select id="selectProductListByCategoryId" resultType="com.ruoyi.guagua.vo.CategoryProductVO" >
+        SELECT id, name,brand, image, description,price,  sales_volume as salesVolume
+        FROM product
+        WHERE status = 1 and stock >0
+                and category_id = #{categoryId}
+    </select>
 
     <select id="selectProductList" parameterType="Product" resultMap="ProductResult">
         <include refid="selectProductVo"/>

@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.ruoyi.guagua.vo.CategoryProductVO;
 import com.ruoyi.guagua.vo.RecommendProductVO;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.weaver.loadtime.Aj;
@@ -27,15 +28,14 @@ import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
  * 商品Controller
- * 
+ *
  * @author lm
  * @date 2025-06-07
  */
 @Slf4j
 @RestController
 @RequestMapping("/product/product")
-public class ProductController extends BaseController
-{
+public class ProductController extends BaseController {
     @Autowired
     private IProductService productService;
 
@@ -44,7 +44,7 @@ public class ProductController extends BaseController
     public AjaxResult recommendList(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "20") int size
-    ){
+    ) {
         PageHelper.startPage(page, size);
         List<Product> list = productService.recommendList();
         PageInfo<Product> pageInfo = new PageInfo<>(list);
@@ -52,6 +52,11 @@ public class ProductController extends BaseController
 
     }
 
+    @GetMapping("/listByCategory")
+    public AjaxResult listByCategory(@RequestParam Long categoryId) {
+        List<CategoryProductVO> productList = productService.getByCategoryId(categoryId);
+        return AjaxResult.success(productList);
+    }
 
     /**
      * ************************************************************
@@ -62,8 +67,7 @@ public class ProductController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('product:product:list')")
     @GetMapping("/list")
-    public TableDataInfo list(Product product)
-    {
+    public TableDataInfo list(Product product) {
         startPage();
         List<Product> list = productService.selectProductList(product);
         return getDataTable(list);
@@ -75,8 +79,7 @@ public class ProductController extends BaseController
     @PreAuthorize("@ss.hasPermi('product:product:export')")
     @Log(title = "商品", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, Product product)
-    {
+    public void export(HttpServletResponse response, Product product) {
         List<Product> list = productService.selectProductList(product);
         ExcelUtil<Product> util = new ExcelUtil<Product>(Product.class);
         util.exportExcel(response, list, "商品数据");
@@ -85,10 +88,9 @@ public class ProductController extends BaseController
     /**
      * 获取商品详细信息
      */
-    @PreAuthorize("@ss.hasPermi('product:product:query')")
+//    @PreAuthorize("@ss.hasPermi('product:product:query')")
     @GetMapping(value = "/{id}")
-    public AjaxResult getInfo(@PathVariable("id") Long id)
-    {
+    public AjaxResult getInfo(@PathVariable("id") Long id) {
         return success(productService.selectProductById(id));
     }
 
@@ -98,8 +100,7 @@ public class ProductController extends BaseController
     @PreAuthorize("@ss.hasPermi('product:product:add')")
     @Log(title = "商品", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody Product product)
-    {
+    public AjaxResult add(@RequestBody Product product) {
         return toAjax(productService.insertProduct(product));
     }
 
@@ -109,8 +110,7 @@ public class ProductController extends BaseController
     @PreAuthorize("@ss.hasPermi('product:product:edit')")
     @Log(title = "商品", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Product product)
-    {
+    public AjaxResult edit(@RequestBody Product product) {
         return toAjax(productService.updateProduct(product));
     }
 
@@ -119,9 +119,8 @@ public class ProductController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('product:product:remove')")
     @Log(title = "商品", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
-    public AjaxResult remove(@PathVariable Long[] ids)
-    {
+    @DeleteMapping("/{ids}")
+    public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(productService.deleteProductByIds(ids));
     }
 }

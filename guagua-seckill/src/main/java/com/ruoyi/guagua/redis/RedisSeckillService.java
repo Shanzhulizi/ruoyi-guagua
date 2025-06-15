@@ -33,14 +33,34 @@ public class RedisSeckillService {
      * @return 0=库存不足，1=成功，2=重复抢购
      */
     public long executeSeckill(Long productId, Long userId) {
+//        String stockKey = "seckill:stock:" + productId;
+//        String userKey = "seckill:user:" + productId;
+//
+//
+//        return redisTemplate.execute(
+//                seckillScript,
+//                // KEYS
+//                Arrays.asList(stockKey, userKey),
+//                // ARGV
+//                userId.toString()
+//        );
+
         String stockKey = "seckill:stock:" + productId;
         String userKey = "seckill:user:" + productId;
 
+        // 提前判断库存避免无效 Lua 执行
+//        String stockStr = (String) redisTemplate.opsForValue().get(stockKey);
+//        if (stockStr == null || Integer.parseInt(stockStr) <= 0) {
+//            return 0L;
+//        }
+        Integer stockStr = (Integer) redisTemplate.opsForValue().get(stockKey);
+        if (stockStr == null || stockStr <= 0) {
+            return 0L;
+        }
+
         return redisTemplate.execute(
                 seckillScript,
-                // KEYS
                 Arrays.asList(stockKey, userKey),
-                // ARGV
                 userId.toString()
         );
     }

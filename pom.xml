@@ -232,6 +232,7 @@
         <module>guagua-product</module>
         <module>guagua-category</module>
         <module>guagua-seckill</module>
+        <module>guagua-cart</module>
 
 
     </modules>

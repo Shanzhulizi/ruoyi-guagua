@@ -2,16 +2,14 @@ package com.ruoyi.guagua.service.impl;
 
 import java.util.List;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.guagua.vo.RecommendProductVO;
+import com.ruoyi.guagua.vo.CategoryProductVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.guagua.mapper.ProductMapper;
 import com.ruoyi.guagua.domain.Product;
 import com.ruoyi.guagua.service.IProductService;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+
 /**
  * 商品Service业务层处理
  * 
@@ -101,6 +99,11 @@ public class ProductServiceImpl implements IProductService
     @Override
     public List<Product> recommendList() {
         return productMapper.selectRecommendedProductList();
+    }
+
+    @Override
+    public List<CategoryProductVO> getByCategoryId(Long categoryId) {
+        return productMapper.selectProductListByCategoryId(categoryId);
     }
 
 
