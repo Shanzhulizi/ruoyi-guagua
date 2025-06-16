@@ -4,21 +4,25 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ruoyi.guagua.domain.CartItem;
+import com.ruoyi.guagua.vo.CartItemShowVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 @Mapper
-public interface CartItemMapper extends BaseMapper<CartItem> {
+public interface CartItemMapper {
+    CartItem selectByUserIdAndProductId(@Param("userId") Long userId, @Param("productId") Long productId);
 
-    //继承BaseMapper后不需要重写
-//    CartItem selectOne(QueryWrapper<CartItem> eq);
-//
-//    void updateById(CartItem existing);
-//
-//    void insert(CartItem item);
-//
-//    List<CartItem> selectList(QueryWrapper<CartItem> eq);
-//
-//    void update(Object o, UpdateWrapper<CartItem> eq);
+    int insertCartItem(CartItem item);
+
+    int updateCartItemQuantity(@Param("id") Long id, @Param("quantity") Integer quantity);
+
+    int updateCartItem(CartItem item);
+
+    int markCartItemDeleted(@Param("userId") Long userId, @Param("productId") Long productId);
+
+    List<CartItemShowVO> selectCartListByUserId(@Param("userId") Long userId);
+
+    int getCount(Long userId);
 }

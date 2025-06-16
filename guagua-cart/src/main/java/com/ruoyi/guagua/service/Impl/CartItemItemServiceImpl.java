@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.ruoyi.guagua.domain.CartItem;
 import com.ruoyi.guagua.mapper.CartItemMapper;
 import com.ruoyi.guagua.service.CartItemService;
+import com.ruoyi.guagua.vo.CartItemShowVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,14 +21,12 @@ public class CartItemItemServiceImpl implements CartItemService {
 
     @Override
     public void addToCart(Long userId, Long productId, Integer quantity) {
-        CartItem existing = cartItemMapper.selectOne(new QueryWrapper<CartItem>()
-                .eq("user_id", userId)
-                .eq("product_id", productId)
-                .eq("del_flag", "0"));
+        CartItem existing = cartItemMapper.selectByUserIdAndProductId(userId, productId);
+
+        System.out.println("exting  "+existing);
 
         if (existing != null) {
-            existing.setQuantity(existing.getQuantity() + quantity);
-            cartItemMapper.updateById(existing);
+            cartItemMapper.updateCartItemQuantity(existing.getId(), quantity);
         } else {
             CartItem item = new CartItem();
             item.setUserId(userId);
@@ -36,33 +35,33 @@ public class CartItemItemServiceImpl implements CartItemService {
             item.setDelFlag("0");
             item.setCreateTime(new Date());
             item.setUpdateTime(new Date());
-            cartItemMapper.insert(item);
+            cartItemMapper.insertCartItem(item);
         }
     }
 
     @Override
-    public List<CartItem> getCartList(Long userId) {
-        return cartItemMapper.selectList(new QueryWrapper<CartItem>()
-                .eq("user_id", userId)
-                .eq("del_flag", "0"));
+    public void updateCartItem(Long userId, Long productId, Integer quantity) {
+        CartItem existing = cartItemMapper.selectByUserIdAndProductId(userId, productId);
+        if (existing != null) {
+            existing.setQuantity(quantity);
+            existing.setUpdateTime(new Date());
+            cartItemMapper.updateCartItem(existing);
+        }
     }
 
     @Override
-    public void updateQuantity(Long userId, Long productId, Integer quantity) {
-        cartItemMapper.update(null, new UpdateWrapper<CartItem>()
-                .set("quantity", quantity)
-                .eq("user_id", userId)
-                .eq("product_id", productId)
-                .eq("del_flag", "0"));
+    public void deleteCartItem(Long userId, Long productId) {
+        cartItemMapper.markCartItemDeleted(userId, productId);
     }
 
     @Override
-    public void removeItem(Long userId, Long productId) {
-        cartItemMapper.update(null, new UpdateWrapper<CartItem>()
-                .set("del_flag", "1")
-                .eq("user_id", userId)
-                .eq("product_id", productId));
+    public List<CartItemShowVO> getCartList(Long userId) {
+        return cartItemMapper.selectCartListByUserId(userId);
     }
 
+    @Override
+    public int getCount(Long userId) {
+        return cartItemMapper.getCount(userId);
+    }
 
 }

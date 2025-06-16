@@ -12,6 +12,13 @@
     <name>guagua-cart Maven Webapp</name>
     <url>http://maven.apache.org</url>
     <dependencies>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.32</version> <!-- 推荐使用最新版 -->
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -33,6 +40,12 @@
             <version>3.5.5</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.5</version>
+        </dependency>
+
     </dependencies>
     <build>
         <finalName>guagua-cart</finalName>

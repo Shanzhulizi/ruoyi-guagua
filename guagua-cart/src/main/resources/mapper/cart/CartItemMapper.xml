@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.guagua.mapper.CartItemMapper">
+
+    <!-- 结果映射，可直接用 resultType 省略 resultMap，这里给出示例 -->
+    <resultMap id="CartItemResult" type="com.ruoyi.guagua.domain.CartItem">
+        <id     column="id"          property="id"/>
+        <result column="user_id"     property="userId"/>
+        <result column="product_id"  property="productId"/>
+        <result column="quantity"    property="quantity"/>
+        <result column="del_flag"    property="delFlag"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+<!--    <sql id="selectProductVo">-->
+<!--        select id, name, category_id, brand, image, images, description, price, stock, status, is_recommended, is_new, is_hot, sales_volume, create_time, update_time from product-->
+<!--    </sql>-->
+
+
+    <!-- 1. 根据 userId + productId 查询购物车项 -->
+    <select id="selectByUserIdAndProductId"
+           resultMap="CartItemResult">
+        SELECT *
+        FROM cart_item
+        WHERE user_id    = #{userId}
+          AND product_id = #{productId}
+          AND del_flag   = '0'
+            LIMIT 1
+    </select>
+
+    <!-- 2. 插入购物车记录 -->
+    <insert id="insertCartItem"
+            parameterType="com.ruoyi.guagua.domain.CartItem"
+            useGeneratedKeys="true"
+            keyProperty="id">
+        INSERT INTO cart_item
+            (user_id, product_id, quantity, del_flag, create_time, update_time)
+        VALUES
+            (#{userId}, #{productId}, #{quantity}, '0', #{createTime}, #{updateTime})
+    </insert>
+
+    <!-- 3. 数量累加更新（quantity = quantity + #{quantity}) -->
+    <update id="updateCartItemQuantity">
+        UPDATE cart_item
+        SET quantity    = quantity + #{quantity},
+            update_time = NOW()
+        WHERE id = #{id}
+          AND del_flag = '0'
+    </update>
+
+    <!-- 4. 覆盖式更新购物车记录（修改数量等字段） -->
+    <update id="updateCartItem"
+            parameterType="com.ruoyi.guagua.domain.CartItem">
+        UPDATE cart_item
+        SET quantity    = #{quantity},
+            update_time = NOW()
+        WHERE id       = #{id}
+          AND del_flag = '0'
+    </update>
+
+    <!-- 5. 逻辑删除购物车记录（置 del_flag = '1'） -->
+    <update id="markCartItemDeleted">
+        UPDATE cart_item
+        SET del_flag    = '1',
+            update_time = NOW()
+        WHERE user_id    = #{userId}
+          AND product_id = #{productId}
+          AND del_flag   = '0'
+    </update>
+
+    <!-- 6. 根据 userId 查询购物车列表 -->
+
+    <select id="selectCartListByUserId"    resultType="com.ruoyi.guagua.vo.CartItemShowVO"  >
+        SELECT c.id,
+--                c.user_id    AS userId,
+               c.product_id AS productId,
+               c.quantity,
+               p.name,
+               p.image,
+               p.description,
+               p.price
+        FROM cart_item c
+                 JOIN product p ON c.product_id = p.id
+        WHERE c.user_id = #{userId}
+          AND c.del_flag = '0'
+        ORDER BY c.update_time DESC
+
+    </select>
+
+
+    <select id="getCount" resultType="int">
+        select count(id)
+        from cart_item
+        where user_id = #{userId}
+            and del_flag = '0'
+    </select>
+</mapper>
