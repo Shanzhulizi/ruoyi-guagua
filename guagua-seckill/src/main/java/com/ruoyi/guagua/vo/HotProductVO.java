@@ -20,6 +20,8 @@ public class HotProductVO {
     /** 商品名 */
     private String name;
 
+    private String image;
+
     /** 原价 */
     @Excel(name = "原价")
     private BigDecimal originalPrice;

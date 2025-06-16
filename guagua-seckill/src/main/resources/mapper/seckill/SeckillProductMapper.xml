@@ -28,6 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT
             sp.id,
             sp.product_id as productId,
+            p.image,
             p.name,
             sp.original_price as originalPrice,
             sp.seckill_price as seckillPrice ,
@@ -44,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             sp.id,
             p.name,
             p.image,
+            sp.product_id as productId,
             sp.original_price as originalPrice,
             sp.seckill_price as seckillPrice
         FROM seckill_product sp

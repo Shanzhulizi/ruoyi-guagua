@@ -14,7 +14,9 @@ public class SeckillProductDisplayVO {
      */
     private Long id;
 
-
+//TODO
+    //补充productId的逻辑，来使得前端购买页面能复用
+    private Long productId;
     /**
      * 商品名
      */
