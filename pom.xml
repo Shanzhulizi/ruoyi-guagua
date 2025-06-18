@@ -234,6 +234,7 @@
         <module>guagua-seckill</module>
         <module>guagua-cart</module>
         <module>guagua-search</module>
+        <module>guagua-gateway</module>
 
 
     </modules>
