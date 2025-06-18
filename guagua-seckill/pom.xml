@@ -25,6 +25,11 @@
             <version>1.18.32</version> <!-- 推荐使用最新版 -->
             <scope>provided</scope>
         </dependency>
+        <!-- Spring Boot Starter Logging，默认有 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
+        </dependency>
 
 <!--        Redission-->
         <dependency>

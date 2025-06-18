@@ -87,4 +87,9 @@ public interface ISeckillProductService
 
     boolean purchaseSeckillProduct(Long id,Long userId);
 
+    /**
+     * 获取所有秒杀商品id
+     * @return
+     */
+    List<Long> getSeckillProductIds();
 }

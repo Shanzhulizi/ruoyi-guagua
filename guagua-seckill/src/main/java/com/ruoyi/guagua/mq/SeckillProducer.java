@@ -3,10 +3,12 @@ package com.ruoyi.guagua.mq;
 
 
 import com.ruoyi.guagua.domain.SeckillMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class SeckillProducer {
 
@@ -19,5 +21,6 @@ public class SeckillProducer {
                 RabbitMQConfig.SECKILL_ROUTING_KEY,
                 message
         );
+        log.info("产生成功");
     }
 }

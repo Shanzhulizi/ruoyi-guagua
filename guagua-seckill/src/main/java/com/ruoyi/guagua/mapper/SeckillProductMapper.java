@@ -100,6 +100,12 @@ public interface SeckillProductMapper
      */
     Integer selectStockByProductId(Long productId);
 
+    /**
+     * 获取所有秒杀商品id
+     * @return
+     */
+    List<Long> selectSeckillProductId();
+
 
     /**
      * 下面三个方法均与库存到Redis有关

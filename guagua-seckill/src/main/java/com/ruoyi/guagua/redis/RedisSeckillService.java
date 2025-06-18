@@ -2,6 +2,8 @@ package com.ruoyi.guagua.redis;
 
 
 import com.ruoyi.guagua.mapper.SeckillProductMapper;
+import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RBloomFilter;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @Service
 public class RedisSeckillService {
 
@@ -24,7 +27,8 @@ public class RedisSeckillService {
 
     @Autowired
     private RedissonClient redissonClient;  // 配置见下方
-
+    //布隆过滤器
+    private static final String BLOOM_FILTER_NAME = "seckill:bloomfilter:products";
 
 
     private DefaultRedisScript<Long> seckillScript;
@@ -43,70 +47,19 @@ public class RedisSeckillService {
      * @return 0=库存不足，1=成功，2=重复抢购
      */
     public long executeSeckill(Long productId, Long userId) {
-////        String stockKey = "seckill:stock:" + productId;
-////        String userKey = "seckill:user:" + productId;
-////
-////
-////        return redisTemplate.execute(
-////                seckillScript,
-////                // KEYS
-////                Arrays.asList(stockKey, userKey),
-////                // ARGV
-////                userId.toString()
-////        );
-//
-//        String stockKey = "seckill:stock:" + productId;
-//        String userKey = "seckill:user:" + productId;
-//
-//        // 提前判断库存避免无效 Lua 执行
-////        String stockStr = (String) redisTemplate.opsForValue().get(stockKey);
-////        if (stockStr == null || Integer.parseInt(stockStr) <= 0) {
-////            return 0L;
-////        }
-//        Integer stock = (Integer) redisTemplate.opsForValue().get(stockKey);
-//        //TODO
-//        // 这里有问题，缓存没命中，应该去数据库查真实库存
-////        if (stock == null || stock <= 0) {
-////            return 0L;
-////        }
-//        if (stock == null) {
-//            // 缓存没命中，回源数据库
-//
-//            Integer dbStock = seckillProductMapper.selectStockByProductId(productId);
-//            /**
-//             * 缓存穿透
-//             */
-////            if (stock == null || stock <= 0) {
-////                // 库存不足或无数据
-////                return 0L;
-////            }
-//
-//            //为空直接在缓存设置为0，防止穿透
-//            if (dbStock == null || dbStock <= 0) {
-//                redisTemplate.opsForValue().set(stockKey, 0, 10, TimeUnit.MINUTES);
-//                return 0L; // 库存无了
-//            }
-//
-//            // 回写缓存，设置过期时间
-//            redisTemplate.opsForValue().set(stockKey, dbStock, 10, TimeUnit.MINUTES);
-//            stock = dbStock;
-//        }
-//
-////        if (stock <= 0) {
-////            return 0L; // 无库存
-////        }
-//
-//
-//        return redisTemplate.execute(
-//                seckillScript,
-//                Arrays.asList(stockKey, userKey),
-//                userId.toString()
-//        );
-
+        RBloomFilter<Long> bloomFilter = redissonClient.getBloomFilter(BLOOM_FILTER_NAME);
+        if (!bloomFilter.contains(productId)) {
+            // 商品ID不存在，直接返回失败，防止缓存穿透
+            return 0L;
+        }
 
         String stockKey = "seckill:stock:" + productId;
         String userKey = "seckill:user:" + productId;
-        String stockStr = (String) redisTemplate.opsForValue().get(stockKey);
+//        String stockStr = (String) redisTemplate.opsForValue().get(stockKey);
+//        String stockStr = String.valueOf(redisTemplate.opsForValue().get(stockKey));
+        Object redisValue = redisTemplate.opsForValue().get(stockKey);
+        String stockStr = (redisValue == null) ? null : redisValue.toString();
+
         Integer stock = null;
 
         //分布式锁配置
@@ -115,6 +68,7 @@ public class RedisSeckillService {
         int retryCount = 0;
         int maxRetry = 10;
 
+        log.debug("进入缓存为空判断块");
 
         while (stockStr == null && retryCount < maxRetry) {
             RLock lock = redissonClient.getLock(lockKey);
@@ -126,13 +80,19 @@ public class RedisSeckillService {
                 if (locked) {
                     // 二次检查，防止并发下缓存已被其他线程写入
                     stockStr = (String) redisTemplate.opsForValue().get(stockKey);
+                    log.info("stockKey: {}", stockKey);
                     if (stockStr == null) {
                         Integer dbStock = seckillProductMapper.selectStockByProductId(productId);
+
+                        log.info("dbstock:  "+dbStock.toString());
                         if (dbStock == null || dbStock <= 0) {
                             redisTemplate.opsForValue().set(stockKey, "0", 10, TimeUnit.MINUTES); // 防止缓存穿透
                             return 0L;
                         }
-                        redisTemplate.opsForValue().set(stockKey, dbStock.toString(), 10, TimeUnit.MINUTES);
+                        log.info("准备写缓存，key={}, value={}", stockKey, dbStock);
+//                        redisTemplate.opsForValue().set(stockKey, dbStock.toString(), 10, TimeUnit.MINUTES);
+                        redisTemplate.opsForValue().set(stockKey, dbStock, 10, TimeUnit.MINUTES);
+                        log.info("缓存写入完成，key={}", stockKey);
                         stock = dbStock;
                     } else {
                         stock = Integer.parseInt(stockStr);

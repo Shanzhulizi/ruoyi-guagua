@@ -61,6 +61,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         WHERE product_id = #{productId}
     </select>
 
+
+  <select id="selectSeckillProductId" resultType="Long">
+        SELECT product_id
+        FROM seckill_product
+
+    </select>
+
+
+
     <select id="selectSeckillProductDetailById" resultType="com.ruoyi.guagua.vo.SeckillProductVO">
         SELECT sp.id,
                sp.product_id      as productId,

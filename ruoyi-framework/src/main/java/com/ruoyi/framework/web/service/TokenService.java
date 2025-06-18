@@ -67,7 +67,7 @@ public class TokenService
         {
             try
             {
-                System.out.println("token "+token);
+//                System.out.println("token "+token);
                 Claims claims = parseToken(token);
                 // 解析对应的权限以及用户信息
                 String uuid = (String) claims.get(Constants.LOGIN_USER_KEY);

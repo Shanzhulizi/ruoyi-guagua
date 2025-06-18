@@ -32,7 +32,7 @@ public class CategoryController extends BaseController
     @GetMapping("/getList")
     public AjaxResult getList(@RequestHeader("Authorization") String token)
     {
-        System.out.println("token "+token);
+//        System.out.println("token "+token);
         List<CategoryVO> list = categoryService.selectCategoryList();
         return AjaxResult.success(list);
     }

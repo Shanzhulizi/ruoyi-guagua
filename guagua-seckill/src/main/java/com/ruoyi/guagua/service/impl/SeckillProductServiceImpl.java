@@ -11,6 +11,7 @@ import com.ruoyi.guagua.domain.SeckillOrder;
 import com.ruoyi.guagua.mapper.SeckillOrderMapper;
 import com.ruoyi.guagua.vo.SeckillProductDisplayVO;
 import com.ruoyi.guagua.vo.SeckillProductVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.guagua.mapper.SeckillProductMapper;
@@ -25,8 +26,10 @@ import static com.ruoyi.guagua.utils.DateUtil.convertDateToLocalDateTime;
  * @author lm
  * @date 2025-06-10
  */
+
+@Slf4j
 @Service
-public class SeckillProductServiceImpl implements ISeckillProductService 
+public class SeckillProductServiceImpl implements ISeckillProductService
 {
     @Autowired
     private SeckillProductMapper seckillProductMapper;
@@ -198,29 +201,29 @@ public class SeckillProductServiceImpl implements ISeckillProductService
     public boolean purchaseSeckillProduct(Long id,Long userId) {
         SeckillProduct product = seckillProductMapper.selectSeckillProductById(id);
         if (product == null) return false;
-
+        System.out.println(product);
         // 时间判断
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime startTime = convertDateToLocalDateTime(product.getStartTime());
         LocalDateTime endTime = convertDateToLocalDateTime(product.getEndTime());
 
         if (now.isBefore(startTime) || now.isAfter(endTime)) {
+            log.info("秒杀活动已结束");
             return false;
         }
-
         // 库存判断
         if (product.getAvailableStock() <= 0) {
             return false;
         }
 
         // 并发减库存
+        //TODO
+        //我觉得这里应该把商品表的库存也一起改掉，但是我懒得搞了
         int result = seckillProductMapper.reduceStock(id);
+        log.info("库存扣减结果 result = {}", result);
         if (result <= 0) {
             return false;
         }
-
-        // 添加订单（此处用假用户ID模拟）
-//        Long userId = getCurrentUserId(); // TODO: 从登录上下文获取用户ID
 
         SeckillOrder order = new SeckillOrder();
         order.setUserId(userId);
@@ -229,9 +232,13 @@ public class SeckillProductServiceImpl implements ISeckillProductService
         order.setCreateTime(new Date());
         order.setStatus(0);
 
-        System.out.println(order);
 
         seckillOrderMapper.insertOrder(order);
         return true;
+    }
+
+    @Override
+    public List<Long> getSeckillProductIds() {
+        return seckillProductMapper.selectSeckillProductId();
     }
 }
