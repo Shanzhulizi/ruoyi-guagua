@@ -27,9 +27,9 @@ server:
     accept-count: 1000
     threads:
       # tomcat最大线程数，默认为200
-      max: 800
+      max: 1000
       # Tomcat启动初始化的线程数，默认值10
-      min-spare: 100
+      min-spare: 200
 
 # 日志配置
 logging:

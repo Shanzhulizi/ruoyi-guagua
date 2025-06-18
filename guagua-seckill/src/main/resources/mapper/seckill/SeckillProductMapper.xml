@@ -54,6 +54,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ORDER BY sp.start_time
     </select>
 
+    <!-- 根据商品ID查询库存 -->
+    <select id="selectStockByProductId" parameterType="long" resultType="Integer">
+        SELECT available_stock
+        FROM seckill_product
+        WHERE product_id = #{productId}
+    </select>
 
     <select id="selectSeckillProductDetailById" resultType="com.ruoyi.guagua.vo.SeckillProductVO">
         SELECT sp.id,

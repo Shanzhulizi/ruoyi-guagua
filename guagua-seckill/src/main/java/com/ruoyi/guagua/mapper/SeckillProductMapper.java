@@ -93,6 +93,13 @@ public interface SeckillProductMapper
     @Update("UPDATE seckill_product SET available_stock = available_stock - 1 WHERE id = #{id} AND available_stock > 0")
     int reduceStock(Long id);
 
+    /**
+     * 缓存查不到，查数据库
+     * @param productId
+     * @return
+     */
+    Integer selectStockByProductId(Long productId);
+
 
     /**
      * 下面三个方法均与库存到Redis有关
