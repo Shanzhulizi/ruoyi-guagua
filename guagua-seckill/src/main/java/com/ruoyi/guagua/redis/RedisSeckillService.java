@@ -76,7 +76,7 @@ public class RedisSeckillService {
 
             try {
                 // 等待最多100ms，拿到后最多持有5秒
-                locked = lock.tryLock(100, 5000, TimeUnit.MILLISECONDS);
+                locked = lock.tryLock(100, 2000, TimeUnit.MILLISECONDS);
                 if (locked) {
                     // 二次检查，防止并发下缓存已被其他线程写入
                     stockStr = (String) redisTemplate.opsForValue().get(stockKey);

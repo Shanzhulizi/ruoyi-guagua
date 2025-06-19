@@ -22,16 +22,15 @@
         <dependency>
             <groupId>co.elastic.clients</groupId>
             <artifactId>elasticsearch-java</artifactId>
-            <version>9.0.2</version>
+            <version>8.14.0</version>
         </dependency>
+
 
 
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-framework</artifactId>
         </dependency>
-
-
 
         <dependency>
             <groupId>junit</groupId>
