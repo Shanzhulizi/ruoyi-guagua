@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ruoyi.guagua.domain.Product;
+import com.ruoyi.guagua.dto.ESProductDTO;
 import com.ruoyi.guagua.vo.CategoryProductVO;
 import com.ruoyi.guagua.vo.RecommendProductVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -79,4 +80,11 @@ public interface ProductMapper
      * @return
      */
     List<CategoryProductVO> selectProductListByCategoryId(Long categoryId);
+
+
+    /**
+     *
+     * @return
+     */
+    List<ESProductDTO> selectAllWithCategory();
 }

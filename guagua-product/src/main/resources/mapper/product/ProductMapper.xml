@@ -134,4 +134,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+
+
+    <select id="selectAllWithCategory" resultType="com.ruoyi.guagua.dto.ESProductDTO">
+        SELECT
+            p.id,
+            p.name,
+            p.brand,
+            c.name AS categoryName,
+            p.price,
+            p.description
+        FROM product p
+                 LEFT JOIN category c ON p.category_id = c.id
+    </select>
 </mapper>
