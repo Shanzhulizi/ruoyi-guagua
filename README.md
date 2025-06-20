@@ -27,13 +27,14 @@
 ![注册截图](./zguaguaPic/register.png)  
 ###  分类商品浏览
 ![分类商品截图](./zguaguaPic/category.png)  
-###  秒杀商品
+###  秒杀商品展示
 ![秒杀商品截图](./zguaguaPic/seckillProducts.png)  
+###  秒杀商品详情
 ![秒杀商品详情截图](./zguaguaPic/seckillDetail.png)  
+###  商品详情
+![商品详情截图](./zguaguaPic/productDetail.png)  
 ###  购物车
 ![购物车截图](./zguaguaPic/cart.png)  
-
-![商品详情截图](./zguaguaPic/productDetail.png)  
 ###  搜索
 ![搜索结果截图](./zguaguaPic/search.png)  
 
