@@ -148,4 +148,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM product p
                  LEFT JOIN category c ON p.category_id = c.id
     </select>
+
+
+
+    <select id="selectByIds" resultType="com.ruoyi.guagua.domain.Product" parameterType="java.util.List">
+        SELECT *
+        FROM product
+        WHERE id IN
+        <foreach collection="list" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
 </mapper>

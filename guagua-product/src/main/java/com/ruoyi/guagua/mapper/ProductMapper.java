@@ -87,4 +87,7 @@ public interface ProductMapper
      * @return
      */
     List<ESProductDTO> selectAllWithCategory();
+
+
+    List<Product> selectByIds(List<Long> ids);
 }

@@ -20,6 +20,7 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MultiMatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
@@ -102,59 +103,36 @@ public class ProductSearchServiceImpl implements ProductSearchService {
 
     /**
      * 搜索功能
-     * @param param
      * @return
      * @throws IOException
      */
-    public List<ESProductDTO> search(ProductSearchParamDTO param) throws IOException {
-//        构造一个“布尔查询”，可以组合多个 must（匹配）和 filter（筛选）条件
+    public List<ESProductDTO> search(String keyword) throws IOException {
+        // 构造多字段匹配查询
         BoolQueryBuilder boolQuery = QueryBuilders.boolQuery();
 
-        // 全文搜索字段
-        if (StringUtils.hasText(param.getName())) {
-            boolQuery.must(QueryBuilders.matchQuery("name", param.getName()));
+        if (StringUtils.hasText(keyword)) {
+            MultiMatchQueryBuilder multiMatchQuery = QueryBuilders.multiMatchQuery(
+                    keyword, "name", "brand", "describe", "category"
+            );
+            boolQuery.must(multiMatchQuery);
         }
 
-        if (StringUtils.hasText(param.getDescribe())) {
-            boolQuery.must(QueryBuilders.matchQuery("describe", param.getDescribe()));
-        }
-
-        // 精确匹配字段
-        if (StringUtils.hasText(param.getBrand())) {
-            boolQuery.filter(QueryBuilders.termQuery("brand.keyword", param.getBrand()));
-        }
-
-        if (StringUtils.hasText(param.getCategory())) {
-            boolQuery.filter(QueryBuilders.termQuery("category.keyword", param.getCategory()));
-        }
-
-        // 区间查询
-        if (param.getMinPrice() != null || param.getMaxPrice() != null) {
-            RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery("price");
-            if (param.getMinPrice() != null) {
-                rangeQuery.gte(param.getMinPrice());
-            }
-            if (param.getMaxPrice() != null) {
-                rangeQuery.lte(param.getMaxPrice());
-            }
-            boolQuery.filter(rangeQuery);
-        }
-
+        // 构造查询请求
         SearchSourceBuilder sourceBuilder = new SearchSourceBuilder()
                 .query(boolQuery)
-                .size(100); // 默认最多查100条
+                .size(100); // 你可以改为分页参数
 
-        SearchRequest request = new SearchRequest(INDEX_NAME);
+        SearchRequest request = new SearchRequest("products"); // 索引名
         request.source(sourceBuilder);
 
+        // 执行搜索
         SearchResponse response = restHighLevelClient.search(request, RequestOptions.DEFAULT);
 
-//        创建一个返回列表 + JSON 转换工具 Jackson 的 ObjectMapper
+        // 解析结果
         List<ESProductDTO> result = new ArrayList<>();
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
         for (SearchHit hit : response.getHits().getHits()) {
-            String json = hit.getSourceAsString();
-            ESProductDTO dto = objectMapper.readValue(json, ESProductDTO.class);
+            ESProductDTO dto = mapper.readValue(hit.getSourceAsString(), ESProductDTO.class);
             result.add(dto);
         }
 

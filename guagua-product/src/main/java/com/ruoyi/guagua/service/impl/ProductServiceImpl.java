@@ -106,5 +106,10 @@ public class ProductServiceImpl implements IProductService
         return productMapper.selectProductListByCategoryId(categoryId);
     }
 
+    @Override
+    public List<Product> getByIds(List<Long> ids) {
+        return productMapper.selectByIds(ids);
+    }
+
 
 }

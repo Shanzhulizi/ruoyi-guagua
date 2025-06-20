@@ -75,4 +75,11 @@ public interface IProductService
      * @return
      */
     List<CategoryProductVO> getByCategoryId(Long categoryId);
+
+    /**
+     * 通过ids批量获取数据
+     * @param ids
+     * @return
+     */
+    List<Product> getByIds(List<Long> ids);
 }
