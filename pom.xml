@@ -41,6 +41,13 @@
     <dependencyManagement>
         <dependencies>
 
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>2.5.15</version>
+                <scope>test</scope>
+            </dependency>
+
             <!-- 覆盖SpringFramework的依赖配置-->
             <dependency>
                 <groupId>org.springframework</groupId>

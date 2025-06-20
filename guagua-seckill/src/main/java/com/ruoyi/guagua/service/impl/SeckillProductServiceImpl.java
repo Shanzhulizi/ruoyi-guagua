@@ -225,6 +225,7 @@ public class SeckillProductServiceImpl implements ISeckillProductService
             return false;
         }
 
+
         SeckillOrder order = new SeckillOrder();
         order.setUserId(userId);
         order.setProductId(id);
@@ -241,4 +242,7 @@ public class SeckillProductServiceImpl implements ISeckillProductService
     public List<Long> getSeckillProductIds() {
         return seckillProductMapper.selectSeckillProductId();
     }
+
+
+
 }
