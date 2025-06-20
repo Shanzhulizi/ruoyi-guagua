@@ -3,14 +3,14 @@ package com.ruoyi.guagua.dto;
 
 import lombok.Data;
 
+//搜索参数类
 @Data
-public class ESProductDTO {
-
-    private Long   id;
+public class ProductSearchParamDTO {
     private String name;
     private String brand;
-//    private String categoryName;
     private String category;
-    private Double price;
+//private String categoryName; //  改为 categoryName
+    private Double minPrice;
+    private Double maxPrice;
     private String describe;
 }

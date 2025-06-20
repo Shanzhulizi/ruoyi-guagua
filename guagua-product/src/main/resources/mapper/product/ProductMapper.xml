@@ -142,9 +142,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             p.id,
             p.name,
             p.brand,
-            c.name AS categoryName,
+            c.name AS `category`,
             p.price,
-            p.description
+            p.description AS `describe`
         FROM product p
                  LEFT JOIN category c ON p.category_id = c.id
     </select>

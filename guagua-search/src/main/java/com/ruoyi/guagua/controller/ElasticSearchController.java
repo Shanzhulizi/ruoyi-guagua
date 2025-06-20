@@ -1,9 +1,12 @@
 package com.ruoyi.guagua.controller;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.guagua.dto.ESProductDTO;
+import com.ruoyi.guagua.dto.ProductSearchParamDTO;
 import com.ruoyi.guagua.service.ProductSearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/es/product")
@@ -45,8 +48,14 @@ public class ElasticSearchController {
 
 
     // 搜索商品
-//    @GetMapping("/query")
-//    public R<List<ESProductDTO>> search(@RequestParam String keyword) {
-//        return R.ok(productSearchService.search(keyword));
-//    }
+    @PostMapping("/search")
+    public AjaxResult search(@RequestBody ProductSearchParamDTO param) {
+        try {
+            List<ESProductDTO> list = productSearchService.search(param);
+            return AjaxResult.success(list);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return AjaxResult.error("搜索失败: " + e.getMessage());
+        }
+    }
 }
